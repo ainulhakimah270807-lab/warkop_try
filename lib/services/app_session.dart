@@ -14,6 +14,7 @@ class AppUser {
   final String branch;
 
   bool get isCashier => role == 'Kasir';
+  bool get isOwner => role == 'Owner';
 }
 
 class ActiveShift {
@@ -67,13 +68,41 @@ class AppSession extends ChangeNotifier {
       notifyListeners();
       return true;
     }
+    if (normalizedUsername == 'dimas' && password == '123456') {
+      _user = const AppUser(
+        id: 'KSR-002',
+        name: 'Dimas Prasetyo',
+        role: 'Kasir',
+        branch: 'Cabang Senopati',
+      );
+      _activeShift = ActiveShift(
+        id: 'SHIFT-20260929-002',
+        label: 'Shift pagi • 08:00 - 16:00',
+        startedAt: DateTime.now(),
+      );
+      notifyListeners();
+      return true;
+    }
+    if (normalizedUsername == 'owner' && password == '123456') {
+      _user = const AppUser(
+        id: 'OWN-001',
+        name: 'Faris Ramadhan',
+        role: 'Owner',
+        branch: 'Cabang Senopati',
+      );
+      _activeShift = null;
+      notifyListeners();
+      return true;
+    }
     return false;
   }
 
-  bool verifyPosPin(String pin) =>
-      _user?.isCashier == true &&
-      RegExp(r'^\d{6}$').hasMatch(pin) &&
-      pin == '123456';
+  bool verifyPosPin(String pin) {
+    const pinsByCashierId = {'KSR-001': '123456', 'KSR-002': '654321'};
+    return _user?.isCashier == true &&
+        RegExp(r'^\d{6}$').hasMatch(pin) &&
+        pin == pinsByCashierId[_user?.id];
+  }
 
   void logout() {
     _user = null;

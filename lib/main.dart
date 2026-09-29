@@ -17,10 +17,12 @@ class MyApp extends StatelessWidget {
     return AnimatedBuilder(
       animation: AppSession.instance,
       builder: (context, child) => MaterialApp(
-        title: 'Cak Kebo Absen',
+        title: 'POSHub Enterprise',
         debugShowCheckedModeBanner: false,
         theme: StitchTheme.lightTheme,
-        home: AppSession.instance.isLoggedIn ? const MainNavigationScreen() : const LoginScreen(),
+        home: AppSession.instance.isLoggedIn
+            ? const MainNavigationScreen()
+            : const LoginScreen(),
       ),
     );
   }

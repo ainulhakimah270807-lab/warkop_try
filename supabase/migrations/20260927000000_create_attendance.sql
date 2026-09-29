@@ -13,5 +13,13 @@ create index if not exists attendance_karyawan_waktu_idx
 
 alter table public.attendance enable row level security;
 
+drop policy if exists "Allow read attendance" on public.attendance;
+create policy "Allow read attendance" on public.attendance
+  for select to anon, authenticated using (true);
+
+drop policy if exists "Allow insert attendance" on public.attendance;
+create policy "Allow insert attendance" on public.attendance
+  for insert to anon, authenticated with check (true);
+
 comment on table public.attendance is
-  'Attendance records. Add authenticated RLS policies before enabling app access.';
+  'Attendance records with RLS policies enabled.';
